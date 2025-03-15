@@ -28,7 +28,7 @@ jobs:
         pip install imgocr onnxruntime numpy Pillow opencv-python pymupdf requests tqdm
 
     - name: Run OCR script
-      run: python ocr.py
+      run: python main.py
       
     - name: Upload result
       uses: actions/upload-artifact@v4
