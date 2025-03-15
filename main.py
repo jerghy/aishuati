@@ -154,7 +154,7 @@ for page_num in range(pagestart,pageend+1):
                         print(f"第{page_num+1}页ai第三次失败")
         except Exception as e:
             print(f"第{page_num+1}页ai第一次失败")
-            result,status_code=clint.send()
+            
 with open("result.json", "w", encoding="utf-8") as f:
     json.dump(outputrelease, f, ensure_ascii=False, indent=4)
     
