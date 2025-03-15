@@ -13,6 +13,8 @@ import mod
 name="高中必刷题数学人教A版必修1.pdf"
 pagestart=12
 pageend=157
+
+
 # url = "https://chogo.teracloud.jp/dav/documents/output.mp3"
 url = "https://chogo.teracloud.jp/dav/shuati/"+name
 auth = HTTPBasicAuth("ThomasXie", "43rKo29cev5Uzbyp")
@@ -51,7 +53,7 @@ output_folder = f'output_{pdf_name.split(".")[0]}'
 pdf_to_images(pdf_path, output_folder)
 
 
-
+print("PDF转图片完成")
 
 def convert_image_to_webp_base64(input_image_path):
     try:
@@ -66,6 +68,8 @@ def convert_image_to_webp_base64(input_image_path):
         return None
 
 base64_image=convert_image_to_webp_base64("input.png")
+
+
 
 
 outputrelease={}
@@ -96,30 +100,33 @@ messages=[
     ]
 clint=runai.Client(mod.nofreemods.Qwen2_VL_7B_Instruct)
 
-for page_num in range(len(pdf_document)):
+for page_num in range(pagestart,pageend+1):
     pg=f'{output_folder}/page_{page_num+1}.png'
     base64_image=convert_image_to_webp_base64(pg)
     messages[0]["content"][0]["image_url"]["url"]=f"data:image/webp;base64,{base64_image}"
     clint.setmessages(messages)
     result,status_code=clint.send()
     if status_code==200:
+        print(f"第{page_num+1}页ai第一次成功")
         result=json.loads(result)
         outputrelease[pg]=result
     else:
         print(f"第{page_num+1}页ai第一次失败")
         result,status_code=clint.send()
         if status_code==200:
+            print(f"第{page_num+1}页ai第二次成功")
             result=json.loads(result)
             outputrelease[pg]=result
         else:
             print(f"第{page_num+1}页ai第二次失败")
             result,status_code=clint.send()
             if status_code==200:
+                print(f"第{page_num+1}页ai第三次成功")
                 result=json.loads(result)
                 outputrelease[pg]=result
             else:
                 print(f"第{page_num+1}页ai第三次失败")
-                
+
 with open("result.json", "w", encoding="utf-8") as f:
     json.dump(outputrelease, f, ensure_ascii=False, indent=4)
     
