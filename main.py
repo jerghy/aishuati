@@ -105,28 +105,56 @@ for page_num in range(pagestart,pageend+1):
     base64_image=convert_image_to_webp_base64(pg)
     messages[0]["content"][0]["image_url"]["url"]=f"data:image/webp;base64,{base64_image}"
     clint.setmessages(messages)
-    result,status_code=clint.send()
-    if status_code==200:
-        print(f"第{page_num+1}页ai第一次成功")
-        result=json.loads(result)
-        outputrelease[pg]=result
-    else:
-        print(f"第{page_num+1}页ai第一次失败")
+
+    try:
         result,status_code=clint.send()
         if status_code==200:
-            print(f"第{page_num+1}页ai第二次成功")
+            print(f"第{page_num+1}页ai第一次成功")
             result=json.loads(result)
             outputrelease[pg]=result
         else:
-            print(f"第{page_num+1}页ai第二次失败")
+            print(f"第{page_num+1}页ai第一次失败")
             result,status_code=clint.send()
             if status_code==200:
-                print(f"第{page_num+1}页ai第三次成功")
+                print(f"第{page_num+1}页ai第二次成功")
                 result=json.loads(result)
                 outputrelease[pg]=result
             else:
-                print(f"第{page_num+1}页ai第三次失败")
-
+                print(f"第{page_num+1}页ai第二次失败")
+                result,status_code=clint.send()
+                if status_code==200:
+                    print(f"第{page_num+1}页ai第三次成功")
+                    result=json.loads(result)
+                    outputrelease[pg]=result
+                else:
+                    print(f"第{page_num+1}页ai第三次失败")
+    except Exception as e:
+        print(f"第{page_num+1}页ai第一次失败")
+        try:
+            result,status_code=clint.send()
+            if status_code==200:
+                print(f"第{page_num+1}页ai第一次成功")
+                result=json.loads(result)
+                outputrelease[pg]=result
+            else:
+                print(f"第{page_num+1}页ai第一次失败")
+                result,status_code=clint.send()
+                if status_code==200:
+                    print(f"第{page_num+1}页ai第二次成功")
+                    result=json.loads(result)
+                    outputrelease[pg]=result
+                else:
+                    print(f"第{page_num+1}页ai第二次失败")
+                    result,status_code=clint.send()
+                    if status_code==200:
+                        print(f"第{page_num+1}页ai第三次成功")
+                        result=json.loads(result)
+                        outputrelease[pg]=result
+                    else:
+                        print(f"第{page_num+1}页ai第三次失败")
+        except Exception as e:
+            print(f"第{page_num+1}页ai第一次失败")
+            result,status_code=clint.send()
 with open("result.json", "w", encoding="utf-8") as f:
     json.dump(outputrelease, f, ensure_ascii=False, indent=4)
     
