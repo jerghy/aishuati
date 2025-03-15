@@ -67,7 +67,7 @@ def convert_image_to_webp_base64(input_image_path):
         print(f"Error: Unable to open or convert the image {input_image_path}")
         return None
 
-base64_image=convert_image_to_webp_base64("input.png")
+# base64_image=convert_image_to_webp_base64("input.png")
 
 
 
