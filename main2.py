@@ -10,10 +10,11 @@ import base64
 import runai
 import mod
 from openai import OpenAI
+import time
 
-name="高中必刷题数学人教A版必修1.pdf"
-pagestart=12
-pageend=157
+name="高中必刷题数学人教A版选择性必修2.pdf"
+pagestart=8
+pageend=89
 
 
 # url = "https://chogo.teracloud.jp/dav/documents/output.mp3"
@@ -136,6 +137,7 @@ for page_num in range(pagestart,pageend+1):
     except Exception as e:
         print(f"Error processing page {page_num}: {e}")
         print(f"失败 page {pg}")
+        time.sleep(30)
         try:
             result=aishuati(pg)
             outputrelease[pg]=result
@@ -143,6 +145,7 @@ for page_num in range(pagestart,pageend+1):
         except Exception as e:
             print(f"Error processing page {page_num}: {e}")
             print(f"失败 page {pg}")
+            time.sleep(60)
             try:
                 result=aishuati(pg)
                 outputrelease[pg]=result
